@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace TaskReminder
@@ -14,6 +15,9 @@ namespace TaskReminder
             this.options = options;
             InitializeComponent();
 
+            MouseHook.Start();
+            MouseHook.MouseAction += new EventHandler(Event);
+
             html = new HtmlTemplate(options.HtmlTemplate);
             task = new Task(options.Task);
 
@@ -24,6 +28,11 @@ namespace TaskReminder
                 html.Content = Regex.Replace(html.Content, "{" + Constants.AfterTomorrow + "}", task.Tables[Constants.AfterTomorrow]);
                 wbDashboard.DocumentText = html.Content;
             }
+        }
+
+        private void Event(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }
