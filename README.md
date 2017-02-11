@@ -1,2 +1,1 @@
-# Input command line arguments example
---html=htmlTemplate.html --task=tasks.txt --timeout=10
+--html=htmlTemplate.html --task=tasks.txt --timeout=10 --width=800 --height=600 --jhead="var alertMessage='Hello World';" --jbody="alert(alertMessage);"
