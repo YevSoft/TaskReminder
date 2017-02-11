@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System.Text.RegularExpressions;
+using System.Windows.Forms;
 
 namespace TaskReminder
 {
@@ -6,6 +7,7 @@ namespace TaskReminder
     {
         private Options options;
         private HtmlTemplate html;
+        private Task task;
 
         public Dashboard(Options options)
         {
@@ -13,11 +15,14 @@ namespace TaskReminder
             InitializeComponent();
 
             html = new HtmlTemplate(options.HtmlTemplate);
+            task = new Task(options.Task);
 
-            if (html.IsSuccess)
+            if (html.IsSuccess && task.IsSuccess)
             {
+                html.Content = Regex.Replace(html.Content, "{" + Constants.Today + "}", task.Tables[Constants.Today]);
+                html.Content = Regex.Replace(html.Content, "{" + Constants.Tomorrow + "}", task.Tables[Constants.Tomorrow]);
+                html.Content = Regex.Replace(html.Content, "{" + Constants.AfterTomorrow + "}", task.Tables[Constants.AfterTomorrow]);
                 wbDashboard.DocumentText = html.Content;
-
             }
         }
     }

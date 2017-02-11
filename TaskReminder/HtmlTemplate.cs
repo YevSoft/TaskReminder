@@ -1,23 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TaskReminder
+﻿namespace TaskReminder
 {
-    public class HtmlTemplate
+    public class HtmlTemplate : ResourceReader
     {
-        public HtmlTemplate(string path)
+        public HtmlTemplate(string path) : base(path)
         {
-            if (IsSuccess = File.Exists(path))
-            {
-                Content = File.ReadAllText(path);
-            }
-        }
 
-        public string Content { get; }
-        public bool IsSuccess { get; }
+        }
     }
 }

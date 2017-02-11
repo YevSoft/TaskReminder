@@ -12,7 +12,7 @@ namespace TaskReminder
         public string Task { get; set; }
 
         [Option('t', "timeout", Required = true, HelpText = "Timeout for displaying dashboard before closing.")]
-        public string Timeout { get; set; }
+        public int Timeout { get; set; }
 
         [HelpOption]
         public string GetUsage()
