@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Windows.Forms;
 
 namespace TaskReminder
@@ -13,7 +14,20 @@ namespace TaskReminder
             {
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
-                Application.Run(new Dashboard(options));
+
+                if (!options.LogDate)
+                {
+                    // Mode 1
+                    Application.Run(new Dashboard(options));
+                }
+                else
+                {
+                    // Mode 2
+                    using (StreamWriter w = File.AppendText(options.DateFile))
+                    {
+                        w.WriteLine(DateTime.Now.ToString());
+                    }
+                }
             }
         }
     }

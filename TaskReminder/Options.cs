@@ -8,21 +8,23 @@ namespace TaskReminder
         public Options()
         {
             HtmlTemplate = "HtmlTemplate.html";
-            Task = "Task.txt";
+            Task = "Tasks.txt";
             Timeout = 5;
             Width = 800;
             Height = 600;
             JHead = string.Empty;
             JBody = string.Empty;
+            LogDate = false;
+            DateFile = "DateLog.txt";
         }
 
-        [Option('x', "html", Required = true, HelpText = "Input html template file to be processed.")]
+        [Option('x', "html", HelpText = "Input html template file to be processed.")]
         public string HtmlTemplate { get; set; }
 
-        [Option('d', "task", Required = true, HelpText = "Input tasks file to be processed.")]
+        [Option('d', "task", HelpText = "Input tasks file to be processed.")]
         public string Task { get; set; }
 
-        [Option('t', "timeout", Required = true, HelpText = "Timeout for displaying dashboard before closing.")]
+        [Option('t', "timeout", HelpText = "Timeout for displaying dashboard before closing.")]
         public int Timeout { get; set; }
 
         [Option('w', "width", HelpText = "Window width in px.")]
@@ -36,6 +38,12 @@ namespace TaskReminder
 
         [Option('s', "jbody", HelpText = "Java script for body tag.")]
         public string JBody { get; set; }
+
+        [Option('l', "logdate", HelpText = "Write date time to log.")]
+        public bool LogDate { get; set; }
+
+        [Option('d', "datefile", HelpText = "File name for logging current date in mode 2.")]
+        public string DateFile { get; set; }
 
         [HelpOption]
         public string GetUsage()
