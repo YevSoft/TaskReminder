@@ -13,6 +13,12 @@ namespace TaskReminder
             InitializeComponent();
 
             html = new HtmlTemplate(options.HtmlTemplate);
+
+            if (html.IsSuccess)
+            {
+                wbDashboard.DocumentText = html.Content;
+
+            }
         }
     }
 }
