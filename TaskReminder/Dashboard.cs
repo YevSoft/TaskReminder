@@ -10,6 +10,8 @@ namespace TaskReminder
         private HtmlTemplate html;
         private Task task;
 
+        public System.Timers.Timer timer { get; set; }
+
         public Dashboard(Options options)
         {
             this.options = options;
@@ -28,9 +30,19 @@ namespace TaskReminder
                 html.Content = Regex.Replace(html.Content, "{" + Constants.AfterTomorrow + "}", task.Tables[Constants.AfterTomorrow]);
                 wbDashboard.DocumentText = html.Content;
             }
+
+            timer = new System.Timers.Timer();
+            timer.Interval = options.Timeout * 1000;
+            timer.Elapsed += new System.Timers.ElapsedEventHandler(myTimer_Elapsed);
+            timer.Start();
         }
 
         private void Event(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        void myTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
             this.Close();
         }
