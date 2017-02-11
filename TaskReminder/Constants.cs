@@ -19,5 +19,7 @@ namespace TaskReminder
 
         public static string JHead = "jhead";
         public static string JBody = "jbody";
+
+        public static string LastDate = "LastDate";
     }
 }

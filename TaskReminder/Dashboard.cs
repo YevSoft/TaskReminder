@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Drawing;
+using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
@@ -31,7 +33,9 @@ namespace TaskReminder
                 html.Content = Regex.Replace(html.Content, "{" + Constants.Today + "}", task.Tables[Constants.Today]);
                 html.Content = Regex.Replace(html.Content, "{" + Constants.Tomorrow + "}", task.Tables[Constants.Tomorrow]);
                 html.Content = Regex.Replace(html.Content, "{" + Constants.AfterTomorrow + "}", task.Tables[Constants.AfterTomorrow]);
-                html.Content = Regex.Replace(html.Content, "{" + Constants.JHead + "}", options.JHead);
+
+                string lastDate = "var " + Constants.LastDate + " = '" + ReadLastDate() + "';";
+                html.Content = Regex.Replace(html.Content, "{" + Constants.JHead + "}", lastDate + options.JHead);
                 html.Content = Regex.Replace(html.Content, "{" + Constants.JBody + "}", options.JBody);
                 wbDashboard.DocumentText = html.Content;
             }
@@ -40,6 +44,13 @@ namespace TaskReminder
             timer.Interval = options.Timeout * 1000;
             timer.Elapsed += new System.Timers.ElapsedEventHandler(myTimer_Elapsed);
             timer.Start();
+        }
+
+        private string ReadLastDate()
+        {
+            if (File.Exists(options.DateFile))
+                return File.ReadLines(options.DateFile).Last();
+            return string.Empty;
         }
 
         private void Event(object sender, EventArgs e)
