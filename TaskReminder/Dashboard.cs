@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
@@ -16,6 +17,8 @@ namespace TaskReminder
         {
             this.options = options;
             InitializeComponent();
+
+            this.Size = new Size(options.Width, options.Height);
 
             MouseHook.Start();
             MouseHook.MouseAction += new EventHandler(Event);
@@ -42,7 +45,7 @@ namespace TaskReminder
             this.Close();
         }
 
-        void myTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        private void myTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
             this.Close();
         }
