@@ -16,5 +16,8 @@ namespace TaskReminder
         public static string Today = "today";
         public static string Tomorrow = "tomorrow";
         public static string AfterTomorrow = "after_tomorrow";
+
+        public static string JHead = "jhead";
+        public static string JBody = "jbody";
     }
 }

@@ -12,6 +12,8 @@ namespace TaskReminder
             Timeout = 5;
             Width = 800;
             Height = 600;
+            JHead = string.Empty;
+            JBody = string.Empty;
         }
 
         [Option('x', "html", Required = true, HelpText = "Input html template file to be processed.")]
@@ -28,6 +30,12 @@ namespace TaskReminder
 
         [Option('h', "height", HelpText = "Window height in px.")]
         public int Height { get; set; }
+
+        [Option('j', "jhead", HelpText = "Java script for head tag.")]
+        public string JHead { get; set; }
+
+        [Option('s', "jbody", HelpText = "Java script for body tag.")]
+        public string JBody { get; set; }
 
         [HelpOption]
         public string GetUsage()

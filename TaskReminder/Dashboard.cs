@@ -31,6 +31,8 @@ namespace TaskReminder
                 html.Content = Regex.Replace(html.Content, "{" + Constants.Today + "}", task.Tables[Constants.Today]);
                 html.Content = Regex.Replace(html.Content, "{" + Constants.Tomorrow + "}", task.Tables[Constants.Tomorrow]);
                 html.Content = Regex.Replace(html.Content, "{" + Constants.AfterTomorrow + "}", task.Tables[Constants.AfterTomorrow]);
+                html.Content = Regex.Replace(html.Content, "{" + Constants.JHead + "}", options.JHead);
+                html.Content = Regex.Replace(html.Content, "{" + Constants.JBody + "}", options.JBody);
                 wbDashboard.DocumentText = html.Content;
             }
 

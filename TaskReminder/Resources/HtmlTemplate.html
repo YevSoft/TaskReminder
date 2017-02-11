@@ -1,33 +1,41 @@
 <!DOCTYPE html>
 <html>
-<style type="text/css">
-	tr {
-		margin-bottom: 10px;
-	}
-	
-	td {
-		vertical-align: top;
-	}
-	
-    .today {
-        color: red;
-    }
+<head>
+    <style type="text/css">
+        tr {
+            margin-bottom: 10px;
+        }
 
-    .tomorrow {
-        color: blue;
-    }
+        td {
+            vertical-align: top;
+        }
 
-    .after_tomorrow {
-        color: grey;
-    }
-	
-	.title {
-		width: 100px;
-	}
-</style>
+        .today {
+            color: red;
+        }
+
+        .tomorrow {
+            color: blue;
+        }
+
+        .after_tomorrow {
+            color: grey;
+        }
+
+        .title {
+            width: 100px;
+        }
+    </style>
+    <script type="text/javascript">
+        {jhead}
+    </script>
+</head>
 <body style="background-color:black;margin:20px;">
 {today}
 {tomorrow}
 {after_tomorrow}
+<script type="text/javascript">
+    {jbody}
+</script>
 </body>
 </html>
