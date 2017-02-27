@@ -37,6 +37,10 @@
       <HintPath>..\packages\CommandLineParser.1.9.71\lib\net45\CommandLine.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="INIFileParser, Version=2.4.0.0, Culture=neutral, PublicKeyToken=79af7b307b65cf3c, processorArchitecture=MSIL">
+      <HintPath>..\packages\ini-parser.3.4.0\lib\net20\INIFileParser.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -93,11 +97,13 @@
   <ItemGroup>
     <Content Include="Resources\HtmlTemplate.html" />
     <Content Include="Resources\Tasks.txt" />
+    <None Include="Resources\Config.ini" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy "..\..\Resources\HtmlTemplate.html" Htmltemplate.html* /b /v /y
-xcopy "..\..\Resources\Tasks.txt" Tasks.txt* /b /v /y</PostBuildEvent>
+xcopy "..\..\Resources\Tasks.txt" Tasks.txt* /b /v /y
+xcopy "..\..\Resources\Config.ini" Config.ini* /b /v /y</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

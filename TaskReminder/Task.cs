@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IniParser.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -14,10 +15,12 @@ namespace TaskReminder
     public class Task : ResourceReader
     {
         private Options options { get; set; }
+        private IniData config { get; set; }
 
-        public Task(Options options) : base(options.Task)
+        public Task(Options options, IniData config) : base(options.Task)
         {
             this.options = options;
+            this.config = config;
             Items = new List<TaskItem>();
             Tables = new Dictionary<string, string>();
             
@@ -51,15 +54,18 @@ namespace TaskReminder
         {
             if (null == items)
                 return;
-            
-            var todayItems = Items.Where(i => i.Date == DateTime.Today).ToList();
-            Tables.Add(Constants.Today, "<table>" + ToTableLines(todayItems, Constants.Today, options.DayToday) + "</table>");
 
-            var tomorrowItems = Items.Where(i => i.Date == DateTime.Today.AddDays(1)).ToList();
-            Tables.Add(Constants.Tomorrow, "<table>" + ToTableLines(todayItems, Constants.Tomorrow, options.DayTomorrow) + "</table>");
+            DateTime day = DateTime.Today;
+            var todayItems = Items.Where(i => i.Date.Month == day.Month && i.Date.Day == day.Day).OrderBy(i => i.Date).ToList();
+            Tables.Add(Constants.Today, "<table>" + ToTableLines(todayItems, Constants.Today, config.GetKey(Constants.Today)) + "</table>");
 
-            var afterTomorrowItems = Items.Where(i => i.Date == DateTime.Today.AddDays(2)).ToList();
-            Tables.Add(Constants.AfterTomorrow, "<table>" + ToTableLines(todayItems, Constants.AfterTomorrow, options.DayAfterTomorrow) + "</table>");
+            DateTime tomorrow = DateTime.Today.AddDays(1);
+            var tomorrowItems = Items.Where(i => i.Date.Month == tomorrow.Month && i.Date.Day == tomorrow.Day).OrderBy(i => i.Date).ToList();
+            Tables.Add(Constants.Tomorrow, "<table>" + ToTableLines(tomorrowItems, Constants.Tomorrow, config.GetKey(Constants.Tomorrow)) + "</table>");
+
+            DateTime aftertomorrow = DateTime.Today.AddDays(2);
+            var afterTomorrowItems = Items.Where(i => i.Date.Month == aftertomorrow.Month && i.Date.Day == aftertomorrow.Day).OrderBy(i => i.Date).ToList();
+            Tables.Add(Constants.AfterTomorrow, "<table>" + ToTableLines(afterTomorrowItems, Constants.AfterTomorrow, config.GetKey(Constants.AfterTomorrow)) + "</table>");
         }
 
         private string ToTableLines(List<TaskItem> items, string className, string block_title)
@@ -67,10 +73,19 @@ namespace TaskReminder
             string html = string.Empty;
             foreach (var line in items)
             {
-                html += string.Format("<tr class=\"" + className + "\"><td class=\"title\">{0}</td><td></td><td>{1}</td></tr>", block_title, line.Text);
+                html += string.Format("<tr class=\"" + className + "\"><td class=\"title\">{0}</td><td class=\"years\">{1}</td><td>{2}</td></tr>", block_title, BuildYearsLabel(line.Date), line.Text);
                 block_title = string.Empty;
             }
             return html;
+        }
+
+        private string BuildYearsLabel(DateTime date)
+        {
+            var years = DateTime.Now.Year - date.Year;
+            if (years <= 0)
+                return string.Empty;
+            var lastdigit = (years % 10);
+            return string.Format(" {0} {1} ", years.ToString(), config.GetKey(lastdigit.ToString() + "y"));
         }
 
         public List<TaskItem> Items { get; }

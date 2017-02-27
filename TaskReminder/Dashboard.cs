@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IniParser.Model;
+using System;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -10,15 +11,18 @@ namespace TaskReminder
     public partial class Dashboard : Form
     {
         private Options options;
+        private IniData config;
         private HtmlTemplate html;
         private Task task;
 
         public System.Timers.Timer timer { get; set; }
 
-        public Dashboard(Options options)
+        public Dashboard(Options options, IniData config)
         {
-            this.options = options;
             InitializeComponent();
+
+            this.options = options;
+            this.config = config;
 
             this.Size = new Size(options.Width, options.Height);
 
@@ -26,7 +30,7 @@ namespace TaskReminder
             MouseHook.MouseAction += new EventHandler(Event);
 
             html = new HtmlTemplate(options.HtmlTemplate);
-            task = new Task(options);
+            task = new Task(options, config);
             
             if (html.IsSuccess && task.IsSuccess)
             {

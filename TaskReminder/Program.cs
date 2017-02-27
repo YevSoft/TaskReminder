@@ -1,4 +1,6 @@
-﻿using System;
+﻿using IniParser;
+using IniParser.Exceptions;
+using System;
 using System.IO;
 using System.Windows.Forms;
 
@@ -10,24 +12,35 @@ namespace TaskReminder
         static void Main(string[] args)
         {
             var options = new Options();
-            if (CommandLine.Parser.Default.ParseArguments(args, options))
+            IniParser.FileIniDataParser parser = null;
+            try
             {
-                Application.EnableVisualStyles();
-                Application.SetCompatibleTextRenderingDefault(false);
+                parser = new FileIniDataParser();
+                var config = parser.ReadFile(Constants.Config);
 
-                if (!options.LogDate)
+                if (CommandLine.Parser.Default.ParseArguments(args, options))
                 {
-                    // Mode 1
-                    Application.Run(new Dashboard(options));
-                }
-                else
-                {
-                    // Mode 2
-                    using (StreamWriter w = File.AppendText(options.DateFile))
+                    Application.EnableVisualStyles();
+                    Application.SetCompatibleTextRenderingDefault(false);
+
+                    if (!options.LogDate)
                     {
-                        w.WriteLine(DateTime.Now.ToString());
+                        // Mode 1
+                        Application.Run(new Dashboard(options, config));
+                    }
+                    else
+                    {
+                        // Mode 2
+                        using (StreamWriter w = File.AppendText(options.DateFile))
+                        {
+                            w.WriteLine(DateTime.Now.ToString());
+                        }
                     }
                 }
+            }
+            catch(Exception e)
+            {
+                MessageBox.Show(e.Message);
             }
         }
     }

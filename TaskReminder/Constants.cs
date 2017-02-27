@@ -21,5 +21,7 @@ namespace TaskReminder
         public static string JBody = "jbody";
 
         public static string LastDate = "LastDate";
+
+        public static string Config = "Config.ini";
     }
 }
