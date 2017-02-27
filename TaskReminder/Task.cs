@@ -13,8 +13,11 @@ namespace TaskReminder
 
     public class Task : ResourceReader
     {
-        public Task(string path) : base(path)
+        private Options options { get; set; }
+
+        public Task(Options options) : base(options.Task)
         {
+            this.options = options;
             Items = new List<TaskItem>();
             Tables = new Dictionary<string, string>();
             
@@ -28,11 +31,17 @@ namespace TaskReminder
                     if (parts.Length != Constants.MaxItemsInTaskLine)
                         continue;
 
-                    Items.Add(new TaskItem()
+                    try
                     {
-                        Date = DateTime.ParseExact(parts[0], Constants.DateFormat, System.Globalization.CultureInfo.InvariantCulture),
-                        Text = parts[1]
-                    });
+                        Items.Add(new TaskItem()
+                        {
+                            Date = DateTime.ParseExact(parts[0], Constants.DateFormat, System.Globalization.CultureInfo.InvariantCulture),
+                            Text = parts[1]
+                        });
+                    }
+                    catch(System.FormatException e)
+                    {
+                    }
                 }
                 PutToHtml(Items);
             }
@@ -44,21 +53,22 @@ namespace TaskReminder
                 return;
             
             var todayItems = Items.Where(i => i.Date == DateTime.Today).ToList();
-            Tables.Add(Constants.Today, "<table>" + ToTableLines(todayItems, Constants.Today) + "</table>");
+            Tables.Add(Constants.Today, "<table>" + ToTableLines(todayItems, Constants.Today, options.DayToday) + "</table>");
 
             var tomorrowItems = Items.Where(i => i.Date == DateTime.Today.AddDays(1)).ToList();
-            Tables.Add(Constants.Tomorrow, "<table>" + ToTableLines(todayItems, Constants.Tomorrow) + "</table>");
+            Tables.Add(Constants.Tomorrow, "<table>" + ToTableLines(todayItems, Constants.Tomorrow, options.DayTomorrow) + "</table>");
 
             var afterTomorrowItems = Items.Where(i => i.Date == DateTime.Today.AddDays(2)).ToList();
-            Tables.Add(Constants.AfterTomorrow, "<table>" + ToTableLines(todayItems, Constants.AfterTomorrow) + "</table>");
+            Tables.Add(Constants.AfterTomorrow, "<table>" + ToTableLines(todayItems, Constants.AfterTomorrow, options.DayAfterTomorrow) + "</table>");
         }
 
-        private string ToTableLines(List<TaskItem> items, string className)
+        private string ToTableLines(List<TaskItem> items, string className, string block_title)
         {
             string html = string.Empty;
             foreach (var line in items)
             {
-                html += string.Format("<tr class=\"" + className + "\"><td class=\"title\">{0}</td><td>{1}</td></tr>", line.Date.ToString(Constants.DateFormat), line.Text);
+                html += string.Format("<tr class=\"" + className + "\"><td class=\"title\">{0}</td><td></td><td>{1}</td></tr>", block_title, line.Text);
+                block_title = string.Empty;
             }
             return html;
         }

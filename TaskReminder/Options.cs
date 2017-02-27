@@ -16,6 +16,9 @@ namespace TaskReminder
             JBody = string.Empty;
             LogDate = false;
             DateFile = "DateLog.txt";
+            DayToday = "Today";
+            DayTomorrow = "Tomorrow";
+            DayAfterTomorrow = "Day after tomorrow";
         }
 
         [Option('x', "html", HelpText = "Input html template file to be processed.")]
@@ -44,6 +47,15 @@ namespace TaskReminder
 
         [Option('d', "datefile", HelpText = "File name for logging current date in mode 2.")]
         public string DateFile { get; set; }
+
+        [Option('e', "dtoday", HelpText = "Label for today's events.")]
+        public string DayToday { get; set; }
+
+        [Option('f', "dtomorrow", HelpText = "Label for tomorrow's events.")]
+        public string DayTomorrow { get; set; }
+
+        [Option('g', "daftertomorrow", HelpText = "Label for after tomorrow's events.")]
+        public string DayAfterTomorrow { get; set; }
 
         [HelpOption]
         public string GetUsage()

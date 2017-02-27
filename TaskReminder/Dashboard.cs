@@ -26,8 +26,8 @@ namespace TaskReminder
             MouseHook.MouseAction += new EventHandler(Event);
 
             html = new HtmlTemplate(options.HtmlTemplate);
-            task = new Task(options.Task);
-
+            task = new Task(options);
+            
             if (html.IsSuccess && task.IsSuccess)
             {
                 html.Content = Regex.Replace(html.Content, "{" + Constants.Today + "}", task.Tables[Constants.Today]);
