@@ -73,19 +73,32 @@ namespace TaskReminder
             string html = string.Empty;
             foreach (var line in items)
             {
-                html += string.Format("<tr class=\"" + className + "\"><td class=\"title\">{0}</td><td class=\"years\">{1}</td><td>{2}</td></tr>", block_title, BuildYearsLabel(line.Date), line.Text);
+                html += string.Format("<tr class=\"" + className + "\"><td class=\"title\">{0}</td><td class=\"years\">{1}</td><td>{2}</td></tr>", block_title, BuildRuYearsLabel(line.Date), line.Text);
                 block_title = string.Empty;
             }
             return html;
         }
 
-        private string BuildYearsLabel(DateTime date)
+        private string BuildRuYearsLabel(DateTime date)
         {
             var years = DateTime.Now.Year - date.Year;
             if (years <= 0)
                 return string.Empty;
-            var lastdigit = (years % 10);
-            return string.Format(" {0} {1} ", years.ToString(), config.GetKey(lastdigit.ToString() + "y"));
+            var lastdigit = (years % 100);
+            var ext = string.Empty;
+            if (lastdigit > 4 && lastdigit < 21)
+                ext = "лет";
+            else
+                lastdigit = (years % 10);
+
+            if (lastdigit == 1)
+                ext = "год";
+            else if (lastdigit > 1 && lastdigit < 5)
+                ext = "года";
+            else
+                ext = "лет";
+
+            return string.Format(" {0} {1} ", years.ToString(), ext);
         }
 
         public List<TaskItem> Items { get; }
